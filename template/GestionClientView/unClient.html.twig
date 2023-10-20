@@ -1,0 +1,15 @@
+{% extends "layout.html.twig" %}
+{% block contenu %}
+    <p><h2> Information du client numéro {{ unClient.getNoCli() }}</h2></p>
+    <p>{{ unClient.prenomCli }} {{ unClient.nomCli }}</p>
+    <p>{{ unClient.adresseRue1Cli }}
+    {% if unClient.adresseRue2Cli %}
+        <p>{{ unClient.adresseRue2Cli }}
+    {% endif %}
+    <p>{{ unClient.cpCli }} {{ unClient.villeCli }}</p>
+    <p>{{ unClient.telCli }}</p>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    Fin de l'affichage
+{% endblock %}

@@ -1,0 +1,12 @@
+<html>
+    <head>
+        {% block header %}{% include '.\\include\\header.html.twig' %}{% endblock %}
+    </head>
+    <body>
+        {% block navbar %}{% include '.\\include\\navbar.html.twig' %}{% endblock %}
+        {%  block contenu %}{% endblock %}
+    </body>
+    <footer>
+        {% block footer %} {% include '.\\include\\footer.html.twig' %} {% endblock %}
+    </footer>
+</html>
