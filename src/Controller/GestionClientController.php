@@ -7,7 +7,7 @@ use ReflectionClass;
 use App\Exceptions\AppException;
 use Tools\MyTwig;
 use App\Entity\Client;
-
+use Tools\Repository;
 
 class GestionClientController {
 
@@ -26,8 +26,8 @@ class GestionClientController {
     }
     
     public function chercherTous(){
-        $modele = new GestionClientModel();
-        $clients = $modele->findAll();
+        $repository = Repository::getRepository("App\Entity\Client");
+        $clients = $repository->findAll();
           if($clients){
             $r = new ReflectionClass($this);
             $vue = str_replace('Controller','View',$r->getShortName())."/plusieursClients.html.twig";
