@@ -6,18 +6,18 @@ namespace Tools;
 
 use PDO;
 use Tools\Connexion;
-use App\Exceptions;
+use App\Exceptions\AppException;
 
 abstract class Repository {
-    
-    // la methode getRepository permet de déclarer et instancier un objet de la classe Repository en fonction d'une classe
-    // $entity = A l'objet qui est lier au repo -> Si client -> ClientRepository
-    // 
-    // classNameLong -> Nom de la classe avec le chemin
-    // ClassNamespace -> namespace de la classe
-    // table -> Nom de la table en fonction de mon objet
-    // connexion -> Connexion a la base
-    
+
+// la methode getRepository permet de déclarer et instancier un objet de la classe Repository en fonction d'une classe
+// $entity = A l'objet qui est lier au repo -> Si client -> ClientRepository
+// 
+// classNameLong -> Nom de la classe avec le chemin
+// ClassNamespace -> namespace de la classe
+// table -> Nom de la table en fonction de mon objet
+// connexion -> Connexion a la base
+
     private string $classNameLong;
     private string $classNamespace;
     private string $table;
@@ -30,16 +30,16 @@ abstract class Repository {
         $this->classNameLong = $entity;
         $this->connexion = Connexion::getConnexion();
     }
-    
-    public static function getRepository(string $entity): Repository{
-        $repositoryName = str_replace('Entity', 'Repository', $entity). 'Repository';
+
+    public static function getRepository(string $entity): Repository {
+        $repositoryName = str_replace('Entity', 'Repository', $entity) . 'Repository';
         $repository = new $repositoryName($entity);
         return $repository;
     }
-    
-    public function findAll(): Array{
-        try{
-            $sql = "SELECT * FROM ".$this->table;
+
+    public function findAll(): Array {
+        try {
+            $sql = "SELECT * FROM " . $this->table;
             $lignes = $this->connexion->query($sql);
             $lignes->setFetchMode(PDO::FETCH_CLASS, $this->classNameLong, null);
             return $lignes->fetchAll();
@@ -48,6 +48,26 @@ abstract class Repository {
         }
     }
 
+    public function findIds(): array {
+        try {
+            $sql = "SELECT id FROM " . $this->table;
+            $lignes = $this->connexion->query($sql);
+            $lignes->setFetchMode(PDO::FETCH_ASSOC);
+            return $lignes->fetchAll();
+        } catch (AppException $ex) {
+            throw new AppException('Erreur application');
+        }
+    }
 
-    
+    public function find(int $id): ?object {
+        try {
+            $sql = "SELECT * FROM " . $this->table . " WHERE id=:id";
+            $ligne = $this->connexion->prepare($sql);
+            $ligne->bindValue(':id', $id, PDO::PARAM_INT);
+            $ligne->execute();
+            return $ligne->fetchObject($this->classNameLong);
+        } catch (Error $ex) {
+            throw new AppException('Erreur application');
+        }
+    }
 }

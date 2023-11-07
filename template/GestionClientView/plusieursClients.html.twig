@@ -1,18 +1,18 @@
 {% extends "layout.html.twig" %}
 {% block contenu %}
     <p><h2> Liste des clients : {{ nombreClient }}</h2></p>
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <th>id</th>
-                <th>titre</th>
-                <th>nom</th>
-                <th>prenom</th>
-                <th>adresse</th>
-                <th>complement</th>
-                <th>cp</th>
-                <th>ville</th>
-                <th>tel</th>
+                <th scope="col">id</th>
+                <th scope="col">titre</th>
+                <th scope="col">nom</th>
+                <th scope="col">prenom</th>
+                <th scope="col">adresse</th>
+                <th scope="col">complement</th>
+                <th scope="col">cp</th>
+                <th scope="col">ville</th>
+                <th scope="col">tel</th>
             </tr>
         </thead>
         <tbody>
@@ -37,5 +37,4 @@
 {% endblock %}
 {% block footer %}
     {{ parent() }}
-    Fin de l'affichage
 {% endblock %}
