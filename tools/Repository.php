@@ -7,6 +7,8 @@ namespace Tools;
 use PDO;
 use Tools\Connexion;
 use App\Exceptions\AppException;
+use Exception;
+use Integer;
 
 abstract class Repository {
 
@@ -49,25 +51,50 @@ abstract class Repository {
     }
 
     public function findIds(): array {
-        try {
-            $sql = "SELECT id FROM " . $this->table;
-            $lignes = $this->connexion->query($sql);
-            $lignes->setFetchMode(PDO::FETCH_ASSOC);
-            return $lignes->fetchAll();
-        } catch (AppException $ex) {
-            throw new AppException('Erreur application');
-        }
+        $sql = "SELECT id FROM " . $this->table;
+        $lignes = $this->connexion->query($sql);
+        $lignes->setFetchMode(PDO::FETCH_ASSOC);
+        return $lignes->fetchAll();
     }
 
     public function find(int $id): ?object {
-        try {
-            $sql = "SELECT * FROM " . $this->table . " WHERE id=:id";
-            $ligne = $this->connexion->prepare($sql);
-            $ligne->bindValue(':id', $id, PDO::PARAM_INT);
-            $ligne->execute();
-            return $ligne->fetchObject($this->classNameLong);
-        } catch (Error $ex) {
-            throw new AppException('Erreur application');
+        $sql = "SELECT * FROM " . $this->table . " WHERE id=:id";
+        $ligne = $this->connexion->prepare($sql);
+        $ligne->bindValue(':id', $id, PDO::PARAM_INT);
+        $ligne->execute();
+        $objet = $ligne->fetchObject($this->classNameLong);
+        return $objet == false ? null : $objet;
+    }
+
+    public function insert(object $objet): void {
+        $attributs = (array) $objet;
+        array_shift($attributs);
+        $colonnes = "(";
+        $colonnesParams = "(";
+        $parametres = array();
+        foreach ($attributs as $key => $value) {
+            $key = str_replace("\0", "", $key);
+            $c = str_replace($this->classNameLong, "", $key);
+            $p = ":" . $c;
+            if ($c != "id") {
+                $colonnes .= $c . " ,";
+                $colonnesParams .= " ? ,";
+                $parametres[] = $value;
+            }
         }
+        $cols = substr($colonnes, 0, -1);
+        $colsParams = substr($colonnesParams, 0, -1);
+        $sql = "INSERT INTO " . $this->table . " " . $cols . ") values " . $colsParams . ")";
+        $unObjetPDO = Connexion::getConnexion();
+        $req = $unObjetPDO->prepare($sql);
+        $req->execute($parametres);
+    }
+
+    public function countRows(): int {
+        $sql = "SELECT COUNT(*) FROM " . $this->table;
+        $ligne = $this->connexion->prepare($sql);
+        $ligne->execute();
+        $objet = $ligne->fetchColumn();
+        return $objet;
     }
 }

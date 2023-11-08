@@ -3,13 +3,13 @@
     
     <div class="container">
         <h2>Nouveau client : </h2>
-        <form action="index.php?c=GestionClient&a=enregistreClient" method="POST">
+        <form action="index.php?c=GestionClient&a=creerClient" method="POST">
             <div class="form-group">
                 <label for="titre">Titre</label>
-                <select class="form-control" id="titre" name="titreCli">
-                    <option>Choisir</option>
-                    <option>Monsieur</option>
-                    <option>Madame</option>
+                <select class="form-control" required id="titre" name="titreCli">
+                    <option disabled selected>Choisir</option>
+                    <option value="Monsieur">Monsieur</option>
+                    <option value="Madame">Madame</option>
                 </select>
             </div>
             <div class="form-group">
@@ -36,9 +36,3 @@
 
     
 {% endblock %}
-{% block footer %}
-    {{ parent() }}
-    Fin de l'affichage
-{% endblock %}
-
-

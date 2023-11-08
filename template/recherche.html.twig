@@ -1,11 +1,12 @@
-<h3>Rechercher</h3>
+
 <div class="container">
-    <form action="?c=GestionClient&a=chercherUn" method="post">
+    <h3>Rechercher</h3>
+    <form action="" method="post">
         <div class="form-group">
-            <label for="numero_client">Id du client </label>
+            <label for="numero_client">Id des {{ objet }} </label>
             <select class="form-control" id="titre" name="id">
-                {% for id in lesIds %}
-                    {%  if idClient and idClient == id['id'] %}
+                {% for id in lesId %}
+                    {%  if idObj and idObj == id['id'] %}
                         <option selected>{{ id['id'] }}</option>
                     {% else %}
                         <option>{{ id['id'] }}</option>
@@ -15,4 +16,10 @@
         </div>
         <input type="submit" value="Voir" class="btn btn-default"/>
     </form>
+    <div>
+        {% if message %}
+            {{ message }}
+        {% endif %}
+
+    </div>
 </div>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Exceptions\AppException;
+use Tools\MyTwig;
+
 
 define('DS', DIRECTORY_SEPARATOR); // Define permet de definir des Constantes
 define('RACINE', new DirectoryIterator(dirname(__FILE__)) . DS . ".." . DS);
@@ -8,6 +10,7 @@ define('RACINE', new DirectoryIterator(dirname(__FILE__)) . DS . ".." . DS);
 include_once(RACINE . DS . 'config/conf.php');
 include_once(PATH_VENDOR . "autoload.php");
 include_once(RACINE . DS . "includes/params.php");
+$vue = "errors\\error.html.twig";
 
 try {
     if ((!array_key_exists('c', $_GET)) || (!array_key_exists('a', $_GET))) { // Permet de vérifier si l'url est correctement saisie
@@ -29,17 +32,17 @@ try {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    include(PATH_VIEW . 'errors\error.html');
+    MyTwig::afficherVue($vue,array());
 } catch (AppException $ex) {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    include(PATH_VIEW . 'errors\error.html');
+    MyTwig::afficherVue($vue,array());
 } catch (Exception $ex) {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    include(PATH_VIEW . 'errors\error.html');
+    MyTwig::afficherVue($vue,array());
 }
 
 

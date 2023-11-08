@@ -5,23 +5,21 @@
         {%  set idClient = unClient.getId() %}
     {% endif %}
     {% block recherche %}
-        {% include "GestionClientView/recherche.html.twig" %}
+        {% include "recherche.html.twig" %}
     {% endblock %}
     {% if unClient %}
-        <p><h2> Information du client numéro {{ unClient.getNoCli() }}</h2></p>
-    <p>{{ unClient.prenomCli }} {{ unClient.nomCli }}</p>
-    <p>{{ unClient.adresseRue1Cli }}
-        {% if unClient.adresseRue2Cli %}
-        <p>{{ unClient.adresseRue2Cli }}
-        {% endif %}
-    <p>{{ unClient.cpCli }} {{ unClient.villeCli }}</p>
-    <p>{{ unClient.telCli }}</p>
+        <div class="container bg-faded">
+            <p><h2> Information du client numéro {{ unClient.getId() }}</h2></p>
+        <p> Prénom: {{ unClient.prenomCli }} Nom: {{ unClient.nomCli }}</p>
+        <p> Adresse1 :{{ unClient.adresseRue1Cli }}
+            {% if unClient.adresseRue2Cli %}
+            <p> Adresse2: {{ unClient.adresseRue2Cli }}
+            {% endif %}
+        <p> Code postal: {{ unClient.cpCli }} Ville: {{ unClient.villeCli }}</p>
+        <p> Téléphone: {{ unClient.telCli }}</p>
+    </div>
 {% else %}
 
 {% endif %}
 
-{% endblock %}
-{% block footer %}
-    {{ parent() }}
-    Fin de l'affichage
 {% endblock %}

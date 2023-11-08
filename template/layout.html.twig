@@ -5,9 +5,11 @@
     <body>
         {% block navbar %}{% include '.\\include\\navbar.html.twig' %}{% endblock %}
         {%  block contenu %}{% endblock %}
-
+        {% block error %}{% endblock %}
     </body>
-    <footer>
-        {% block footer %} {% include '.\\include\\footer.html.twig' %} {% endblock %}
+    <footer class="container text-center ">
+        {% block footer %} 
+            Fin de l'affichage
+        {% include '.\\include\\footer.html.twig' %} {% endblock %}
     </footer>
 </html>

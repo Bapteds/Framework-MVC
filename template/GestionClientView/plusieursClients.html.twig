@@ -1,36 +1,28 @@
 {% extends "layout.html.twig" %}
 {% block contenu %}
     <p><h2> Liste des clients : {{ nombreClient }}</h2></p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">id</th>
-                <th scope="col">titre</th>
-                <th scope="col">nom</th>
-                <th scope="col">prenom</th>
-                <th scope="col">adresse</th>
-                <th scope="col">complement</th>
-                <th scope="col">cp</th>
-                <th scope="col">ville</th>
-                <th scope="col">tel</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for client in desClients %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">nom</th>
+            <th scope="col">prenom</th>
+            <th scope="col">ville</th>
+            <th scope="col">Nombre de commandes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in desClients %}
             <tr>
                 <td>{{client.id}}</td>
-                <td>{{client.titreCli}}</td>
                 <td>{{client.nomCli}}</td>
                 <td>{{client.prenomCli}}</td>
-                <td>{{client.adresseRue1Cli}}</td>
-                <td>{{client.adresseRue2Cli}}</td>
-                <td>{{client.cpCli}}</td>
                 <td>{{client.villeCli}}</td>
-                <td>{{client.telCli}}</td>
+                <td>0</td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
 
 
 

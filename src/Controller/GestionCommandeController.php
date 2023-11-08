@@ -7,19 +7,31 @@ namespace App\Controller;
 use App\Model\GestionCommandeModel;
 use ReflectionClass;
 use App\Exceptions\AppException;
+use Tools\Repository;
+use Tools\MyTwig;
+
 
 class GestionCommandeController {
 
-    public function chercheUne(array $params) {
-        $modele = new GestionCommandeModel();
-        $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
-        $uneCommande = $modele->find($id);
-        if ($uneCommande) {
-            $r = new ReflectionClass($this);
-            include_once PATH_VIEW . str_replace('Controller', 'View', $r->getShortName()) . "/uneCommande.php";
-        } else {
-            throw new AppException("Commande " . $id . " inconnue");
+    private $classpath = "App\Entity\Commande";
+
+    public function chercherUne(array $params) {
+        $repository = Repository::getRepository($this->classpath);
+        $lesIds = $repository->findIds();
+        $params['lesId'] = $lesIds;
+        $params['objet'] = "Commandes";
+        if (array_key_exists('id', $params)) {
+            $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
+            $uneCommande = $repository->find($id);
+            if ($uneCommande) {
+                $params['uneCommande'] = $uneCommande;
+            } else {
+                $params['message'] = "Commande " . $id . " inconnu";
+            }
         }
+        $r = new ReflectionClass($this);
+        $vue = str_replace('Controller', 'View', $r->getShortName()) . "/uneCommande.html.twig";
+        MyTwig::afficherVue($vue, $params);
     }
 
     public function chercherToutes() {
