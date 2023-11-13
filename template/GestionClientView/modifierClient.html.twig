@@ -1,0 +1,38 @@
+{%  extends "layout.html.twig" %}
+{% block contenu %}
+    
+    <div class="container">
+        <h2>Nouveau client : </h2>
+        <form action="?c=GestionClient&a=sauvegarderClient&id={{ client.id }}" method="POST">
+            <div class="form-group">
+                <label for="titre">Titre</label>
+                <select class="form-control" required id="titre" name="titreCli">
+                    <option value="{{ client.titreCli }}">{{ client.titreCli }}</option>
+                    <option value="{{ client.titreCli=="Monsieur" ? 'Madame' : 'Monsieur' }}">{{ client.titreCli=="Monsieur" ? 'Madame' : 'Monsieur' }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nom">Nom:</label>
+                <input type="text" class="form-control" id="nom" placeholder="Nom" name="nomCli" required value="{{ client.nomCli }}">
+                <label for="prenom">Prénom:</label>
+                <input type="text" class="form-control" id="nom" placeholder="Prénom" name="prenomCli" required value="{{ client.prenomCli }}">
+                <label for="adresse">Adresse:</label>
+                <input type="text" class="form-control" id="adresse" placeholder="Adresse" name="adresseRue1Cli" required value="{{ client.adresseRue1Cli }}">
+                <label for="complement">Complément d'adresse:</label>
+                <input type="text" class="form-control" id="complement" placeholder="Complément" name="adresseRue2Cli" value="{{ client.adresseRue2Cli }}">
+                <label for="CP">Code postal:</label>
+                <input type="text" class="form-control" id="cp" placeholder="Code postal" name="cpCli" required value="{{ client.cpCli }}">
+                <label for="ville">Ville:</label>
+                <input type="text" class="form-control" id="ville" placeholder="Ville" name="villeCli" required value="{{ client.villeCli }}">
+                <label for="tel">Téléphone:</label>
+                <input type="text" class="form-control" id="tel" placeholder="Téléphone" name="telCli" required value="{{ client.telCli }}">
+            </div>
+            <button type="submit" class="btn btn-success">Modifier</button>
+        </form>  
+    </div>
+        
+
+
+    
+{% endblock %}
+{# empty Twig template #}

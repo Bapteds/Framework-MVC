@@ -1,28 +1,41 @@
 {% extends "layout.html.twig" %}
 {% block contenu %}
-    <p><h2> Liste des clients : {{ nombreClient }}</h2></p>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">id</th>
-            <th scope="col">nom</th>
-            <th scope="col">prenom</th>
-            <th scope="col">ville</th>
-            <th scope="col">Nombre de commandes</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for client in desClients %}
+    <div class="container">
+        <p><h2> Liste des clients : {{ nombreClient }}</h2></p>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{client.id}}</td>
-                <td>{{client.nomCli}}</td>
-                <td>{{client.prenomCli}}</td>
-                <td>{{client.villeCli}}</td>
-                <td>0</td>
+                <th scope="col">id</th>
+                <th scope="col">titre</th>
+                <th scope="col">nom</th>
+                <th scope="col">prenom</th>
+                <th scope="col">ville</th>
+                <th scope="col">Numero</th>
+                <th scope="col">Adresse 1</th>
+                <th scope="col">Adresse 2</th>
+                <th scope="col" colspan="2" class="text-info">Gestion</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for client in desClients %}
+                <tr>
+                    <td>{{client.id}}</td>
+                    <td>{{client.titreCli}}</td>
+                    <td>{{client.nomCli}}</td>
+                    <td>{{client.prenomCli}}</td>
+                    <td>{{client.villeCli}}</td>
+                    <td>{{ client.telCli }}</td>
+                    <td>{{ client.adresseRue1Cli }}</td>
+                    <td>{{ client.adresseRue2Cli }}</td>
+                    <td><a class="btn btn-warning" role="button" href="?c=GestionClient&a=modifierClient&id={{ client.id }}">Modifier</a></td>
+                    <td><a class="btn btn-danger" role="button" href="?c=GestionClient&a=supprimerClient&id={{ client.id }}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 
 

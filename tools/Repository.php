@@ -97,4 +97,68 @@ abstract class Repository {
         $objet = $ligne->fetchColumn();
         return $objet;
     }
+
+    public function executeSQL(string $sql): ?array {
+        $resultat = $this->connexion->query($sql);
+        return $resultat->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function update(object $objet, int $id) {
+        $unObjetPDO = Connexion::getConnexion();
+        $attributs = (array) $objet;
+        array_shift($attributs);
+        $updateInstruction = "set ";
+        foreach ($attributs as $key => $value) {
+            $key = str_replace("\0", "", $key);
+            $key = str_replace($this->classNameLong, "", $key);
+            $updateInstruction .= $key . "= \"" . $value . "\", ";
+        }
+        $updateInstruction = rtrim($updateInstruction, ", ");
+
+        $sql = "UPDATE " . $this->table . " " . $updateInstruction . " WHERE id=:id";
+        $req = $unObjetPDO->prepare($sql);
+
+        $req->bindValue(':id', $id, PDO::PARAM_INT);
+
+        //$sql = str_replace("é", "e", $sql);
+        $req->execute();
+    }
+
+    public function delete(int $id) {
+        $unObjetPDO = Connexion::getConnexion();
+        $sql = "DELETE FROM " . $this->table . " WHERE id=:id";
+        $req = $unObjetPDO->prepare($sql);
+        $req->bindValue(':id', $id, PDO::PARAM_INT);
+        $req->execute();
+    }
+    
+    public function __call(string $methode,array $params): array{
+        if(preg_match("#^findBy#", $methode)){
+            return $this->traiteFindBy($methode,array_values($params[0]));
+        }
+    }
+    
+    private function traiteFindBy($methode, $params){
+        $criteres = str_repalce("findBy","",$methode);
+        $criteres = explode("_and_",$critere);
+        if(count($critere)>0){
+            $sql = "SELECT * FROM ".$this->table . " where ";
+            $pasPremier = false;
+            foreach ($criteres as $critere){
+                if($pasPremier){
+                    $sql .=" and ";
+                }
+                $sql .= $critere . " = ? ";
+                $pasPremier = true;
+            }
+            $lignes = $this->connexion->prepare($sql);
+            $lignes->execute($params);
+            $lignes->setFetchMode(PDO::FETCH_CLASS, $this->classNameLong, null);
+            return $lignes->fetchAll();
+        }
+    }
+    
+    
+    
+    
 }

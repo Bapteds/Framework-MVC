@@ -3,7 +3,6 @@
 use App\Exceptions\AppException;
 use Tools\MyTwig;
 
-
 define('DS', DIRECTORY_SEPARATOR); // Define permet de definir des Constantes
 define('RACINE', new DirectoryIterator(dirname(__FILE__)) . DS . ".." . DS);
 
@@ -14,7 +13,8 @@ $vue = "errors\\error.html.twig";
 
 try {
     if ((!array_key_exists('c', $_GET)) || (!array_key_exists('a', $_GET))) { // Permet de vérifier si l'url est correctement saisie
-        throw new Exception("Erreur, cette page n'existe pas");
+        return MyTwig::afficherVue("index.html.twig", array());
+        //throw new Exception("Erreur, cette page n'existe pas");
     }
 
     $BaseController = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_SPECIAL_CHARS); // Filtre sur l'url pour éviter prblm injection.
@@ -32,17 +32,17 @@ try {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    MyTwig::afficherVue($vue,array());
+    MyTwig::afficherVue($vue, array());
 } catch (AppException $ex) {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    MyTwig::afficherVue($vue,array());
+    MyTwig::afficherVue($vue, array());
 } catch (Exception $ex) {
     if (MODE_DEV == 'on') {
         print_r($ex->getMessage());
     }
-    MyTwig::afficherVue($vue,array());
+    MyTwig::afficherVue($vue, array());
 }
 
 

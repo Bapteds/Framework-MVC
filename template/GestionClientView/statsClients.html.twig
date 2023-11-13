@@ -1,1 +1,35 @@
-{# empty Twig template #}
+{% extends "layout.html.twig" %}
+{% block contenu %}
+    <div class="container">
+        <p><h2> Statistiques des clients</h2></p>
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">nom</th>
+                <th scope="col">prenom</th>
+                <th scope="col">ville</th>
+                <th scope="col">Nombre de commandes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in desClients | sort((b,a) =>a.nomCli <=> b.nomCli) | sort((b,a) =>a.nb <=> b.nb) %}
+                <tr>
+                    <td>{{client.id}}</td>
+                    <td>{{client.nomCli}}</td>
+                    <td>{{client.prenomCli}}</td>
+                    <td>{{client.villeCli}}</td>
+                    <td>{{client.nb}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
