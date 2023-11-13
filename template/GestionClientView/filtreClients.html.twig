@@ -1,0 +1,33 @@
+{%  extends "layout.html.twig" %}
+{% block contenu %}
+    <div class="container"> 
+        <h2>Recherche filtrée</h2>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label for="titre">Titre</label>
+                <select class="form-control" id="titre" name="titreCli">
+                    <option default >Choisir...</option>
+                    {% for titre in titres %}
+                        <option>{{ titre }}</option>
+                    {% endfor %}
+                </select>
+                <label for="cp">Code postal</label>
+                <select class="form-control" id="cp" name="cpCli">
+                    <option default >Choisir...</option>
+                    {% for cp in cps %}
+                        <option>{{ cp }}</option>
+                    {% endfor %}
+                </select>
+                <label for="ville">Ville</label>
+                <select class="form-control" id="ville" name="villeCli">
+                    <option default >Choisir...</option>
+                    {% for ville in villes %}
+                        <option>{{ ville }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-success">Voir</button>
+        </form>
+</div>
+
+
+{% endblock %}

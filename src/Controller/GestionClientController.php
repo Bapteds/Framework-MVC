@@ -10,12 +10,17 @@ use Tools\MyTwig;
 use App\Entity\Client;
 use Tools\Repository;
 use App\Repository\ClientRepository;
+use Exception;
 
-class GestionClientController {
+
+
+class GestionClientController
+{
 
     private $classpath = "App\Entity\Client";
 
-    public function chercherUn(array $params) {
+    public function chercherUn(array $params)
+    {
         $repository = Repository::getRepository($this->classpath);
         $lesIds = $repository->findIds();
         $params['lesId'] = $lesIds;
@@ -34,7 +39,8 @@ class GestionClientController {
         MyTwig::afficherVue($vue, $params);
     }
 
-    public function chercherTous() {
+    public function chercherTous()
+    {
         $repository = Repository::getRepository($this->classpath);
         $clients = $repository->findAll();
         if ($clients) {
@@ -47,7 +53,8 @@ class GestionClientController {
         }
     }
 
-    public function creerClient(array $params) {
+    public function creerClient(array $params)
+    {
         if (empty($params)) {
             $vue = "GestionClientView\\creerClient.html.twig";
             MyTwig::afficherVue($vue, array());
@@ -64,17 +71,20 @@ class GestionClientController {
         }
     }
 
-    public function verificationSaisieClient(array $params) {
+    public function verificationSaisieClient(array $params)
+    {
         return $params;
     }
 
-    public function nbClients(array $params): void {
+    public function nbClients(array $params): void
+    {
         $repository = Repository::getRepository($this->classpath);
         $nbClients = $repository->countRows();
         echo "Nombre de clients: " . $nbClients;
     }
 
-    public function statsClients() {
+    public function statsClients()
+    {
         $repository = Repository::getRepository($this->classpath);
         $desClients = $repository->statistiquesTousClients();
         $r = new ReflectionClass($this);
@@ -82,7 +92,8 @@ class GestionClientController {
         MyTwig::afficherVue($vue, array('desClients' => $desClients));
     }
 
-    public function modifierClient(array $params) {
+    public function modifierClient(array $params)
+    {
         if (array_key_exists('id', $params)) {
             $repository = Repository::getRepository($this->classpath);
             $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
@@ -93,7 +104,8 @@ class GestionClientController {
         }
     }
 
-    public function sauvegarderClient(array $params) {
+    public function sauvegarderClient(array $params)
+    {
         try {
             $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
             $this->verificationSaisieClient($params);
@@ -106,7 +118,8 @@ class GestionClientController {
         }
     }
 
-    public function supprimerClient(array $params) {
+    public function supprimerClient(array $params)
+    {
         try {
             $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
             $repository = Repository::getRepository($this->classpath);
@@ -116,13 +129,73 @@ class GestionClientController {
             throw new AppException("Erreur au moment de la suppression");
         }
     }
-    
-    public function testFindBy(array $params) :void{
+
+    public function testFindBy(array $params): void
+    {
         $repository = Repository::getRepository($this->classpath);
-        $parametres = array("titreCli"=>"Monsieur","villeCli"=>"Toulon");
+        $parametres = array("titreCli" => "Monsieur", "villeCli" => "Toulon");
         $clients = $repository->findByTitreCli_and_villeCli($parametres);
         $r = new ReflectionClass($this);
-        $vue = str_replace('Controller', 'View', $r->getShortName()) ."/tousClients.html.twig";
-        MyTwig::afficherVue($vue, array('lesClients'=> $clients));
+        $vue = str_replace('Controller', 'View', $r->getShortName()) . "/plusieursClients.html.twig";
+        MyTwig::afficherVue($vue, array('desClients' => $clients));
     }
+
+    public function rechercheClients(array $params): void
+    {
+        $repository = Repository::getRepository($this->classpath);
+        $titres = $repository->findColumnDistinctValues('titreCli');
+        $cps = $repository->findColumnDistinctValues('cpCli');
+        $villes = $repository->findColumnDistinctValues('villeCli');
+        $paramsVue['titres'] = $titres;
+        $paramsVue['cps'] = $cps;
+        $paramsVue['villes'] = $villes;
+
+        $criterePrepares = $this->verifieEtPrepareCriteres($params);
+
+        if (count($criterePrepares) > 0) {
+            $clients = $repository->findBy($params);
+            $paramsVue['desClients'] = $clients;
+            foreach ($criterePrepares as $valeur) {
+                ($valeur != "Choisir...") ? ($criteres[] = $valeur) : null;
+            }
+            $paramsVue['criteres'] = $criteres;
+
+            $vue = "GestionClientView\\plusieursClients.html.twig";
+            MyTwig::afficherVue($vue, $paramsVue);
+        } else {
+            $vue = "GestionClientView\\filtreClients.html.twig";
+            MyTwig::afficherVue($vue, $paramsVue);
+        }
+    }
+
+    private function verifieEtPrepareCriteres(array $params): array
+    {
+        $args = array(
+            'titreCli' => array(
+                'filter' => FILTER_VALIDATE_REGEXP | FILTER_SANITIZE_SPECIAL_CHARS,
+                'flags' => FILTER_NULL_ON_FAILURE,
+                'options' => array('regexp' => '/^(Monsieur|Madame|Mademoiselle) $/'),
+
+                'cpCli' => array(
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+                    'flags' => FILTER_NULL_ON_FAILURE,
+                    //'options' => array('regexp' => '/ [0-9] {5} /'),
+                ),
+                'villeCli' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            ),
+        );
+        $retour = filter_var_array($params, $args, false);
+        if(isset($retour['titreCli']) || isset($retour['cpCli']) || isset($retour['villeCli'])){
+            $element = "Choisir...";
+            while(in_array($element, $retour)){
+                unset($retour[array_search($element, $retour)]);
+            }
+        }
+        return $retour;
+    }
+
+   
+
+
+
 }
