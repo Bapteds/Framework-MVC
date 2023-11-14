@@ -1,9 +1,0 @@
-{%  macro list(nom, valeurs, label, id) %}
-    <label for="{{ label }}">{{ label }}</label>
-    <select class="form-control" id="{{ id }}" name="{{ nom }}">
-        <option default >Choisir...</option>
-        {% for valeur in valeurs %}
-            <option>{{ valeur }}</option>
-        {% endfor %}
-    </select>
-{% endmacro %}

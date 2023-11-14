@@ -13,7 +13,7 @@ $vue = "errors\\error.html.twig";
 
 try {
     if ((!array_key_exists('c', $_GET)) || (!array_key_exists('a', $_GET))) { // Permet de vérifier si l'url est correctement saisie
-        return MyTwig::afficherVue("index.html.twig", array());
+        return MyTwig::afficherVue("welcome.html.twig", array());
         //throw new Exception("Erreur, cette page n'existe pas");
     }
 
