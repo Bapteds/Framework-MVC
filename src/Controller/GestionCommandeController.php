@@ -10,7 +10,6 @@ use App\Exceptions\AppException;
 use Tools\Repository;
 use Tools\MyTwig;
 
-
 class GestionCommandeController {
 
     private $classpath = "App\Entity\Commande";
@@ -35,13 +34,27 @@ class GestionCommandeController {
     }
 
     public function chercherToutes() {
-        $modele = new GestionCommandeModel();
-        $commandes = $modele->findAll();
+        $repository = Repository::getRepository($this->classpath);
+        $commandes = $repository->findAll();
         if ($commandes) {
             $r = new ReflectionClass($this);
             include_once PATH_VIEW . str_replace('Controller', 'View', $r->getShortName()) . "/plusieursCommandes.php";
         } else {
             throw new AppException("Aucune commande à afficher");
+        }
+    }
+
+    public function commandesUnClient(array $params) {
+        $vue = "GestionCommandeView\\commandeClient.html.twig";
+        if (array_key_exists('id', $params)) {
+            $id = filter_var(intval($params["id"]), FILTER_VALIDATE_INT);
+            $repository = Repository::getRepository($this->classpath);
+            $listeCommandesClient = $repository->getAllClientCommande($id);
+            MyTwig::afficherVue($vue, array('client'=>$listeCommandesClient['client'],'commandes'=>$listeCommandesClient['commandes']));
+
+            // RETOURNE LA VUE
+        } else {
+            MyTwig::afficherVue($vue, $params);
         }
     }
 }

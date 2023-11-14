@@ -131,23 +131,23 @@ abstract class Repository {
         $req->bindValue(':id', $id, PDO::PARAM_INT);
         $req->execute();
     }
-    
-    public function __call(string $methode,array $params): array{
-        if(preg_match("#^findBy#", $methode)){
-            return $this->traiteFindBy($methode,array_values($params[0]));
+
+    public function __call(string $methode, array $params): array {
+        if (preg_match("#^findBy#", $methode)) {
+            return $this->traiteFindBy($methode, array_values($params[0]));
         }
     }
-    
-    private function traiteFindBy($methode, $params){
-        $criteres = str_replace("findBy","",$methode);
-        $criteres = explode("_and_",$criteres);
 
-        if(count($criteres)>0){
-            $sql = "SELECT * FROM ".$this->table . " where ";
+    private function traiteFindBy($methode, $params) {
+        $criteres = str_replace("findBy", "", $methode);
+        $criteres = explode("_and_", $criteres);
+
+        if (count($criteres) > 0) {
+            $sql = "SELECT * FROM " . $this->table . " where ";
             $pasPremier = false;
-            foreach ($criteres as $critere){
-                if($pasPremier){
-                    $sql .=" and ";
+            foreach ($criteres as $critere) {
+                if ($pasPremier) {
+                    $sql .= " and ";
                 }
                 $sql .= $critere . " = ? ";
                 $pasPremier = true;
@@ -158,30 +158,37 @@ abstract class Repository {
             return $lignes->fetchAll();
         }
     }
-    
-    public function findColumnDistinctValues(string $colonne) : array{
-        $sql = "SELECT DISTINCT " . $colonne . " libelle from ". $this->table . " order by 1"; // Order by correspond a l'index de la colonne, ici ID.
+
+    public function findColumnDistinctValues(string $colonne): array {
+        $sql = "SELECT DISTINCT " . $colonne . " libelle from " . $this->table . " order by 1"; // Order by correspond a l'index de la colonne, ici ID.
         $tab = $this->connexion->query($sql)->fetchAll(PDO::FETCH_COLUMN);
         return $tab;
     }
-    
-    public function findBy(array $params){
+
+    public function findBy(array $params) {
         $element = "Choisir...";
-        while(in_array($element, $params)){
-            unset($params[array_search($element,$params)]);
+        while (in_array($element, $params)) {
+            unset($params[array_search($element, $params)]);
         }
-        
+
         $cles = array_keys($params);
         $methode = "findBy";
-        for($i = 0; $i < count($cles); $i++){
-            if($i > 0){
-                $methode .="_and_";
+        for ($i = 0; $i < count($cles); $i++) {
+            if ($i > 0) {
+                $methode .= "_and_";
             }
             $methode .= $cles[$i];
         }
-    
-        return $this->traiteFindBy($methode,array_values($params));
+
+        return $this->traiteFindBy($methode, array_values($params));
     }
 
-    
+    public function findCommandeFromIdClient(int $id) {
+        $sql = "SELECT id,noFacture,dateCde from " . $this->table . " WHERE idClient = :id"; // Order by correspond a l'index de la colonne, ici ID.
+        $ligne = $this->connexion->prepare($sql);
+        $ligne->bindValue(':id', $id, PDO::PARAM_INT);
+        $ligne->execute();
+        $ligne->setFetchMode(PDO::FETCH_CLASS, $this->classNameLong, null);
+        return $ligne->fetchAll();
+    }
 }
