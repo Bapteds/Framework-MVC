@@ -91,6 +91,8 @@ class GestionClientController {
             $r = new ReflectionClass($this);
             $vue = str_replace('Controller', 'View', $r->getShortName()) . "/modifierClient.html.twig";
             MyTwig::afficherVue($vue, array('client' => $client));
+        }else{
+             return $this->chercherTous();
         }
     }
 
@@ -173,4 +175,7 @@ class GestionClientController {
         }
         return $retour;
     }
+    
+    
+    
 }

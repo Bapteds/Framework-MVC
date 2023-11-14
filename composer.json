@@ -18,6 +18,7 @@
         "phpunit/phpunit": "=9.5"
     },
     "require": {
-        "twig/twig": "^3.7"
+        "twig/twig": "^3.7",
+        "larapack/dd": "^1.1"
     }
 }

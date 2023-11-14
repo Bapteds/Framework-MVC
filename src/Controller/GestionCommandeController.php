@@ -10,6 +10,7 @@ use App\Exceptions\AppException;
 use Tools\Repository;
 use Tools\MyTwig;
 
+
 class GestionCommandeController {
 
     private $classpath = "App\Entity\Commande";
@@ -51,8 +52,7 @@ class GestionCommandeController {
             $repository = Repository::getRepository($this->classpath);
             $listeCommandesClient = $repository->getAllClientCommande($id);
             MyTwig::afficherVue($vue, array('client'=>$listeCommandesClient['client'],'commandes'=>$listeCommandesClient['commandes']));
-
-            // RETOURNE LA VUE
+            //composer require larapack/dd
         } else {
             MyTwig::afficherVue($vue, $params);
         }

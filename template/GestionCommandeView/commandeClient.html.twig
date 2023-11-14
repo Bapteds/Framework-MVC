@@ -2,20 +2,21 @@
 {% block contenu %}
     <div class="container">
         {% if client !=null %}
+            <h2>Informations du client N° {{ client.id }}</h2>
+            <h4> Prénom: {{ client.prenomCli }} </h4> <h4> Nom: {{ client.nomCli }}</h4>
+            <h4> Adresse1 :{{ client.adresseRue1Cli }}</h4>
+            {% if client.adresseRue2Cli %}
+                <h4> Adresse2: {{ client.adresseRue2Cli }}</h4>
+            {% endif %}
+            <h4> Code postal: {{ client.cpCli }}</h4><h4> Ville: {{ client.villeCli }}</h4>
+            <h4> Téléphone: {{ client.telCli }}</h4>
             {% if commandes ==null %}
                 <h2>Le client ne possède pas de commande</h2>
             {% else %}
-                <h2>Informations du client N° {{ client.id }}</h2>
-                <h4> Prénom: {{ client.prenomCli }} </h4> <h4> Nom: {{ client.nomCli }}</h4>
-                <h4> Adresse1 :{{ client.adresseRue1Cli }}</h4>
-                {% if client.adresseRue2Cli %}
-                    <h4> Adresse2: {{ client.adresseRue2Cli }}</h4>
-                {% endif %}
-                <h4> Code postal: {{ client.cpCli }}</h4><h4> Ville: {{ client.villeCli }}</h4>
-                <h4> Téléphone: {{ client.telCli }}</h4>
+                {{ include('blocks/arrayCommande.html.twig') }}
             {% endif %}
         {% else %}
-            <h2>Aucun client ne correspond à l'id</h2>
+            <h2 class="text-center text-danger">Le client demandé n'existe pas </h2>
         {% endif %}
 
 
