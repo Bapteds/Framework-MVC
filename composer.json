@@ -1,5 +1,6 @@
 {
-    "name": "vendor/mon-petit-m-v-c",
+    "license" : "MIT",
+    "name": "eds/mon-petit-m-v-c",
     "description": "Description of project MonPetitMVC.",
     "authors": [
         {
@@ -19,6 +20,7 @@
     },
     "require": {
         "twig/twig": "^3.7",
-        "larapack/dd": "^1.1"
+        "larapack/dd": "^1.1",
+        "php": ">=8.0"
     }
 }
