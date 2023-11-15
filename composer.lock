@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2672c82cff6adadb7e66feb48ce73d32",
+    "content-hash": "86e3cf5106144ca357189872fe244884",
     "packages": [
         {
             "name": "larapack/dd",

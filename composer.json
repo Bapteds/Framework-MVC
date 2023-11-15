@@ -1,7 +1,8 @@
 {
-    "license" : "MIT",
+    "license" : "proprietary",
     "name": "eds/mon-petit-m-v-c",
     "description": "Description of project MonPetitMVC.",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "baptiste.erades",
