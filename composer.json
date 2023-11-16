@@ -1,9 +1,8 @@
 {
     "license" : "proprietary",
-    "name": "eds/mvc",
+    "name": "Bapteds/Framework-MVC",
     "type": "project",
     "description": "Description of project MonPetitMVC.",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "baptiste.erades",
