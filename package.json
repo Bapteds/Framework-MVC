@@ -1,0 +1,22 @@
+{
+  "name": "frameworkmvc",
+  "version": "1.0.2",
+  "description": "Framework MVC",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bapteds/frameworkmvc.git"
+  },
+  "author": "Erades Baptiste",
+  "license": "proprietary",
+  "bugs": {
+    "url": "https://github.com/Bapteds/frameworkmvc/issues"
+  },
+  "homepage": "https://github.com/Bapteds/frameworkmvc#readme"
+}
